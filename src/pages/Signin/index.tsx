@@ -60,7 +60,7 @@ const SignIn = () => {
                   src={logo}
                 />
                 <div className="-intro-x text-white font-medium text-4xl leading-tight mt-10">
-                  CMS SGK
+								BOOKING TOUR
                 </div>
               </div>
             </div>

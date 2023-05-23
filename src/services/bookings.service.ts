@@ -1,28 +1,28 @@
 import { CommonResponse } from "models/common";
 import { getAsync, patchAsync, deleteAsync, postAsync } from "./request";
 
-const ticketAPI = {
-	getTicket(params?: any): Promise<CommonResponse> {
-		const url = "/v1/tickets"
+const bookingAPI = {
+	getBookings(params?: any): Promise<CommonResponse> {
+		const url = "/v1/bookings"
 		return getAsync(url, params);
 	},
-	addTicket( params: any): Promise<CommonResponse> {
-		const url = "/v1/tickets"
+	addBookings( params: any): Promise<CommonResponse> {
+		const url = "/v1/bookings"
 		return postAsync(url, params);
 	},
-	updateTicket(
+	updateBookings(
     id: string,
     params: any
   ): Promise<CommonResponse> {
-    const url = `/v1/tickets/${id}`
+    const url = `/v1/bookings/${id}`
     return patchAsync(url, params)
   },
-	deleteTicket(
+	deleteBookings(
     id: string
   ): Promise<CommonResponse> {
-    const url = `/v1/tickets/delete/${id}`
+    const url = `/v1/bookings/delete/${id}`
     return deleteAsync(url)
   }
 };
 
-export default ticketAPI;
+export default bookingAPI;

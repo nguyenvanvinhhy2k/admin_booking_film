@@ -8,19 +8,34 @@ export interface Menu {
 
 export const menuConfig: Menu[] = [
 	{
-    id: 1,
-    name: 'Quản lý Users',
-    slug: '/users',
+    id: 6,
+    name: 'Trang chủ',
+    slug: '/',
   },
   {
     id: 2,
-    name: 'Quản lý Bài tập',
-    slug: '/exercise'
+    name: 'Quản lý Tours',
+    slug: '/tours'
   },
   {
     id: 3,
-    name: 'Quản lý Học tập',
-    slug: '/study'
+    name: 'Quản lý Loại Tour',
+    slug: '/categories'
+  },
+	{
+    id: 4,
+    name: 'Quản lý Bookings',
+    slug: '/bookings'
+  },
+  {
+    id: 5,
+    name: 'Quản lý Reviews',
+    slug: '/reviews'
+  },
+	{
+    id: 1,
+    name: 'Quản lý Users',
+    slug: '/users',
   }
 ]
 

@@ -6,22 +6,23 @@ import ReactSelect from 'react-select'
 import { Edit, Plus, X } from 'lucide-react'
 import Modal from '@/components/Modal'
 import { toast } from 'react-toastify'
-import ticketAPI from '@/services/tickets.service'
-import ModalEditTicket from '@/components/ModalEditTicket'
-import ModalAddTicket from '@/components/ModalAddTicket'
+import ticketAPI from '@/services/tours.service'
+import ModalEditTicket from '@/components/ModalEditCategory'
+import ModalAddTicket from '@/components/ModalAddCategory'
+import bookingAPI from '@/services/bookings.service'
 
-const Ticket = () => {
+const Bookings = () => {
 	const [showModalAdd, setShowModalAdd] = useState<boolean>(false);
   const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
   const [showModalEdit, setShowModalEdit] = useState<boolean>(false);
-  const [itemTicket, setItemTicket] = useState<any>({});
-  const [idTicket, setIdTicket] = useState<any>();
-  const [tickets, setTickets] = useState<any>([]);
+  const [itemBookings, setItemBookings] = useState<any>({});
+  const [idBookings, setIdBookings] = useState<any>();
+  const [bookings, setBookings] = useState<any>([]);
 
-  const getDataListTickets = async () => {
+  const getDataListBookings = async () => {
     try {
-      const data = await ticketAPI.getTicket()
-      setTickets(data?.data?.data)
+      const data = await bookingAPI.getBookings()
+      setBookings(data?.data?.data)
     } catch (error) {
       console.log(error)
     }
@@ -29,13 +30,13 @@ const Ticket = () => {
 
   const handleConfirmDelete = async () => {
     try {
-			const res = await ticketAPI.deleteTicket(idTicket)
+			const res = await bookingAPI.deleteBookings(idBookings)
 			setShowModalDelete(false)
 			if (res?.data?.status === 'error') {
 				toast.error(res?.data?.message)
 			} else {
 				toast.success('Xóa user thành công.')
-				getDataListTickets()
+				getDataListBookings()
 			}
 		} catch (error) {
 			console.log(error)
@@ -44,16 +45,16 @@ const Ticket = () => {
 
   const handleStatus = (id: any) => {
 		setShowModalDelete(true)
-    setIdTicket(id)
+    setIdBookings(id)
 	}
 
   const handleUpdate = (item: any) => {
 		setShowModalEdit(true)
-		setItemTicket(item)
+		setItemBookings(item)
 	}
 
   useEffect(() => {
-    getDataListTickets()
+    getDataListBookings()
   }, [])
 
   return (
@@ -62,15 +63,15 @@ const Ticket = () => {
 				showModalAdd={showModalAdd}
 				setShowModalAdd={setShowModalAdd}
 				callBack={() => {
-					getDataListTickets()
+					getDataListBookings()
 				}}
 			/>
       <ModalEditTicket
 				showModalEdit={showModalEdit}
 				setShowModalEdit={setShowModalEdit}
-				itemTicket={itemTicket}
+				itemTicket={itemBookings}
 				callBack={() => {
-					getDataListTickets()
+					getDataListBookings()
 				}}
 			/>
       <Modal
@@ -79,13 +80,13 @@ const Ticket = () => {
 				handleCancel={() => setShowModalDelete(false)}
 				handleConfirm={handleConfirmDelete}
 			>
-				Bạn chắc chắn muốn Xóa ticket này chứ?
+				Bạn chắc chắn muốn Xóa tour này chứ?
 			</Modal>
       <div className="wrapper">
         <div className="wrapper-box">
           <div className="content">
             <div className="intro-y flex items-center mt-8">
-              <h2 className="text-lg font-medium mr-auto">Danh sách Ticket</h2>
+              <h2 className="text-lg font-medium mr-auto">Danh sách Tours</h2>
             </div>
             <div className="grid grid-cols-24 gap-6 mt-5 overflow-y-auto">
               <div className="intro-y col-span-12 lg:col-span-6">
@@ -137,7 +138,7 @@ const Ticket = () => {
                           </thead>
                           <tbody>
                             {
-                              tickets?.map((item: any) => {
+                              bookings?.map((item: any) => {
                                 return (
                                   <>
                                     <tr className="text-center">
@@ -148,7 +149,7 @@ const Ticket = () => {
                                       <td>{item.email}</td>
                                       <td>{item.phoneNumber}</td>
                                       <td className="table-report__action w-[1%] border-l whitespace-nowrap lg:whitespace-normal">
-                                        <div className="flex items-center justify-around"> 
+                                        <div className="flex items-center justify-around">
                                           <div className="cursor-pointer font-semibold text-sky-600 hover:opacity-60 flex items-center" onClick={() => handleUpdate(item)}>
                                             <div className='inline-block' />
                                             <Edit className='mr-1.5 inline-block' size={16} />
@@ -193,4 +194,4 @@ const Ticket = () => {
   )
 }
 
-export default Ticket
+export default Bookings

@@ -7,6 +7,10 @@ const SignIn = lazy(() => import('../pages/Signin'))
 const SignUp = lazy(() => import('../pages/SignUp'))
 const Home = lazy(() => import('../pages/index'))
 const Users = lazy(() => import('../pages/Users'))
+const Tours = lazy(() => import('../pages/Tours'))
+const Bookings = lazy(() => import('../pages/Bookings'))
+const Categories = lazy(() => import('../pages/Categories'))
+const Reviews = lazy(() => import('../pages/Reviews'))
 
 const AppRouter = () => {
 	return (
@@ -19,11 +23,11 @@ const AppRouter = () => {
 				path="/"
 				element={
 					<Suspense>
-					 <PrivateRouter >
+					 {/* <PrivateRouter > */}
 						<Layout>
 							<Home />
 						</Layout>
-						</PrivateRouter>
+						{/* </PrivateRouter> */}
 					</Suspense>
 				}
 			/>
@@ -31,9 +35,57 @@ const AppRouter = () => {
 				path="/users"
 				element={
 					<Suspense>
-						 <PrivateRouter >
+						 {/* <PrivateRouter > */}
 						<Layout>
 							<Users />
+						</Layout>
+						{/* </PrivateRouter> */}
+					</Suspense>
+				}
+			/>
+			<Route
+				path="/tours"
+				element={
+					<Suspense>
+						 <PrivateRouter >
+						<Layout>
+							<Tours />
+						</Layout>
+						</PrivateRouter>
+					</Suspense>
+				}
+			/>
+			<Route
+				path="/categories"
+				element={
+					<Suspense>
+						 <PrivateRouter >
+						<Layout>
+							<Categories />
+						</Layout>
+						</PrivateRouter>
+					</Suspense>
+				}
+			/>
+			<Route
+				path="/bookings"
+				element={
+					<Suspense>
+						 <PrivateRouter >
+						<Layout>
+							<Bookings />
+						</Layout>
+						</PrivateRouter>
+					</Suspense>
+				}
+			/>
+			<Route
+				path="/reviews"
+				element={
+					<Suspense>
+						 <PrivateRouter >
+						<Layout>
+							<Reviews />
 						</Layout>
 						</PrivateRouter>
 					</Suspense>

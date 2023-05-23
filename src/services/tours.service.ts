@@ -1,28 +1,28 @@
 import { CommonResponse } from "models/common";
 import { getAsync, patchAsync, deleteAsync, postAsync } from "./request";
 
-const screeningsAPI = {
-	getScreenings(params?: any): Promise<CommonResponse> {
-		const url = "/v1/screenings"
+const tourAPI = {
+	getTour(params?: any): Promise<CommonResponse> {
+		const url = "/tours"
 		return getAsync(url, params);
 	},
-	addScreenings( params: any): Promise<CommonResponse> {
-		const url = "/v1/screenings"
+	addTour( params: any): Promise<CommonResponse> {
+		const url = "/tours"
 		return postAsync(url, params);
 	},
-	updateTicketScreenings(
+	updateTour(
     id: string,
     params: any
   ): Promise<CommonResponse> {
-    const url = `/v1/screenings/${id}`
+    const url = `/tours/${id}`
     return patchAsync(url, params)
   },
-	deleteScreenings(
+	deleteTour(
     id: string
   ): Promise<CommonResponse> {
-    const url = `/v1/screenings/delete/${id}`
+    const url = `/tours/delete/${id}`
     return deleteAsync(url)
   }
 };
 
-export default screeningsAPI;
+export default tourAPI;

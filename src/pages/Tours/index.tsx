@@ -130,6 +130,7 @@ const Tours = () => {
                             <tr className="text-center">
                               <th className="whitespace-nowrap">ID</th>
                               <th className="whitespace-nowrap">Tên tour</th>
+                              <th className="whitespace-nowrap">Loại tour</th>
                               <th className="whitespace-nowrap">Mô tả</th>
                               <th className="whitespace-nowrap">Thời gian bắt đầu</th>
                               <th className="whitespace-nowrap">Thời gian kết thúc</th>
@@ -146,6 +147,7 @@ const Tours = () => {
                                     <tr className="text-center">
                                       <td>{item.id}</td>
                                       <td>{item.tourName}</td>
+                                      <td>{item.cateId}</td>
                                       <td>{item.description}</td>
                                       <td>{item.startDate}</td>
                                       <td>{item.endDate}</td>

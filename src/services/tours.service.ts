@@ -20,7 +20,7 @@ const tourAPI = {
 	deleteTour(
     id: string
   ): Promise<CommonResponse> {
-    const url = `/tours/delete/${id}`
+    const url = `/tours/${id}`
     return deleteAsync(url)
   }
 };

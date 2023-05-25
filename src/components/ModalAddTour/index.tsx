@@ -1,12 +1,14 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import Modal from 'components/Modal'
 import userAPI from "@/services/users.service";
 import categoriesAPI from "@/services/categories.service";
 import tourAPI from "@/services/tours.service";
+import ReactSelect from 'react-select';
+import useQueryParams from "@/hooks/useQueryParams";
 
 const schema = yup.object().shape({
 	tourName: yup.string().required("Vui lòng nhập tourName"),
@@ -24,7 +26,9 @@ type IProps = {
 }
 
 const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
-
+    const [categories, setCategories] = useState<any>([])
+	const [params, setQueryParams] = useQueryParams()
+	const { page, limit, category } = params
 	const {
 		register,
 		handleSubmit,
@@ -53,6 +57,7 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 				startDate: data.startDate,
 				endDate: data.endDate,
 				price: data.price,
+				cateId: 1
 			})
 			if (res?.data?.status === 'error') {
 				toast.error(res?.data?.message)
@@ -65,6 +70,19 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 			console.log(error)
 		}
 	}
+
+	const getDataListCategories = async () => {
+		try {
+		  const data = await categoriesAPI.getCategories()
+		  setCategories(data?.data?.data)
+		} catch (error) {
+		  console.log(error)
+		}
+	  }
+
+	  useEffect(() => {
+		getDataListCategories()
+	},[])
 
 	useEffect(() => {
 		reset({
@@ -106,6 +124,43 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 						</p>
 					)}
 				</div>
+
+				<div className="my-2">
+						<div className="flex items-center ">
+							<label className="w-[140px] font-medium text-base">Loại tour: </label>
+							<ReactSelect
+								options={categories?.map((cate: any) => {
+									return {
+										value: cate.id,
+										label: cate.name
+									};
+								}
+								)}
+								onChange={(value: any) => {
+									setQueryParams({
+										...params, page: page, limit: limit, category: value ? value.value : undefined
+									}, true)
+								}}
+								className="w-48 flex-1"
+								classNamePrefix="select-input__custom "
+								isClearable
+								value={
+									categories?.filter((item:any) => item.id == category).map((item: any) => {
+										return {
+											value: item._id,
+											label: item.name
+										}
+									})
+								}
+								placeholder="Chọn loại tour"
+							/>
+						</div>
+						{errors?.categories && (
+							<p className="text-sm text-red-700 mt-1 ml-1 m-auto pl-[140px]">
+								{errors?.categories?.message}
+							</p>
+						)}
+					</div>
 				<div className="my-2">
 					<div className="flex items-center">
 						<span className="w-[140px] font-medium text-base">
@@ -150,12 +205,33 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 				<div className="my-2">
 					<div className="flex items-center">
 						<span className="w-[140px] font-medium text-base">
+						 Giá tiền:
+						</span>
+						<div className="flex-1">
+							<input
+								placeholder="Nhập giá tiền"
+								type="text"
+								{...register("price")}
+								className="form-control w-full"
+							/>
+						</div>
+					</div>
+					{errors?.price && (
+						<p className="text-sm text-red-700 mt-1 ml-1 m-auto pl-[140px]">
+							{errors?.price?.message}
+						</p>
+					)}
+				</div>
+
+				<div className="my-2">
+					<div className="flex items-center">
+						<span className="w-[140px] font-medium text-base">
 						Thời gian bắt đầu:
 						</span>
 						<div className="flex-1">
 							<input
 								placeholder="Nhập thời gian bắt đầu"
-								type="text"
+								type="date"
 								{...register("startDate")}
 								className="form-control w-full"
 							/>
@@ -175,7 +251,7 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 						<div className="flex-1">
 							<input
 								placeholder="Nhập thời gian kết thúc"
-								type="text"
+								type="date"
 								{...register("endDate")}
 								className="form-control w-full"
 							/>
@@ -184,26 +260,6 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 					{errors?.endDate && (
 						<p className="text-sm text-red-700 mt-1 ml-1 m-auto pl-[140px]">
 							{errors?.endDate?.message}
-						</p>
-					)}
-				</div>
-				<div className="my-2">
-					<div className="flex items-center">
-						<span className="w-[140px] font-medium text-base">
-						 Giá tiền:
-						</span>
-						<div className="flex-1">
-							<input
-								placeholder="Nhập giá tiền"
-								type="text"
-								{...register("price")}
-								className="form-control w-full"
-							/>
-						</div>
-					</div>
-					{errors?.price && (
-						<p className="text-sm text-red-700 mt-1 ml-1 m-auto pl-[140px]">
-							{errors?.price?.message}
 						</p>
 					)}
 				</div>

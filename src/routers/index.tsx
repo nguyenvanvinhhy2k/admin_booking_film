@@ -23,11 +23,11 @@ const AppRouter = () => {
 				path="/"
 				element={
 					<Suspense>
-					 {/* <PrivateRouter > */}
+					 <PrivateRouter >
 						<Layout>
 							<Home />
 						</Layout>
-						{/* </PrivateRouter> */}
+						</PrivateRouter>
 					</Suspense>
 				}
 			/>
@@ -35,11 +35,11 @@ const AppRouter = () => {
 				path="/users"
 				element={
 					<Suspense>
-						 {/* <PrivateRouter > */}
+						 <PrivateRouter >
 						<Layout>
 							<Users />
 						</Layout>
-						{/* </PrivateRouter> */}
+						</PrivateRouter>
 					</Suspense>
 				}
 			/>

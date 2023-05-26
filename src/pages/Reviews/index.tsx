@@ -58,7 +58,7 @@ const Reviews = () => {
 
   return (
     <>
-    	<ModalAddTicket
+    	{/* <ModalAddTicket
 				showModalAdd={showModalAdd}
 				setShowModalAdd={setShowModalAdd}
 				callBack={() => {
@@ -68,11 +68,11 @@ const Reviews = () => {
       <ModalEditTicket
 				showModalEdit={showModalEdit}
 				setShowModalEdit={setShowModalEdit}
-				itemTicket={itemReviews}
+				itemReviews={itemReviews}
 				callBack={() => {
 					getDataListReviews()
 				}}
-			/>
+			/> */}
       <Modal
 				title="Xóa user"
 				open={showModalDelete}

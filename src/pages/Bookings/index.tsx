@@ -59,7 +59,7 @@ const Bookings = () => {
 
   return (
     <>
-    	<ModalAddTicket
+    	{/* <ModalAddTicket
 				showModalAdd={showModalAdd}
 				setShowModalAdd={setShowModalAdd}
 				callBack={() => {
@@ -73,9 +73,9 @@ const Bookings = () => {
 				callBack={() => {
 					getDataListBookings()
 				}}
-			/>
+			/> */}
       <Modal
-				title="Xóa user"
+				title="Xóa booking tour"
 				open={showModalDelete}
 				handleCancel={() => setShowModalDelete(false)}
 				handleConfirm={handleConfirmDelete}
@@ -86,7 +86,7 @@ const Bookings = () => {
         <div className="wrapper-box">
           <div className="content">
             <div className="intro-y flex items-center mt-8">
-              <h2 className="text-lg font-medium mr-auto">Danh sách Tours</h2>
+              <h2 className="text-lg font-medium mr-auto">Danh sách booking</h2>
             </div>
             <div className="grid grid-cols-24 gap-6 mt-5 overflow-y-auto">
               <div className="intro-y col-span-12 lg:col-span-6">

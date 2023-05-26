@@ -20,7 +20,7 @@ const categoriesAPI = {
 	deleteCategories(
     id: string
   ): Promise<CommonResponse> {
-    const url = `/delete/categories/${id}`
+    const url = `/categories/${id}`
     return deleteAsync(url)
   }
 };

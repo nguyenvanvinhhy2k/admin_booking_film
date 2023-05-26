@@ -3,24 +3,24 @@ import { getAsync, patchAsync, deleteAsync, postAsync } from "./request";
 
 const reviewAPI = {
 	getReviews(params?: any): Promise<CommonResponse> {
-		const url = "/v1/reviews"
+		const url = "/reviews"
 		return getAsync(url, params);
 	},
 	addReviews( params: any): Promise<CommonResponse> {
-		const url = "/v1/reviews"
+		const url = "/reviews"
 		return postAsync(url, params);
 	},
 	updateReviews(
     id: string,
     params: any
   ): Promise<CommonResponse> {
-    const url = `/v1/reviews/${id}`
+    const url = `/reviews/${id}`
     return patchAsync(url, params)
   },
 	deleteReviews(
     id: string
   ): Promise<CommonResponse> {
-    const url = `/v1/reviews/delete/${id}`
+    const url = `/reviews/${id}`
     return deleteAsync(url)
   }
 };

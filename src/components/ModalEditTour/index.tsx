@@ -7,6 +7,7 @@ import Modal from 'components/Modal'
 import categoriesAPI from "@/services/categories.service";
 import ReactSelect from 'react-select';
 import useQueryParams from "@/hooks/useQueryParams";
+import tourAPI from "@/services/tours.service";
 
 type IProps = {
 	itemTours: Object | any
@@ -19,16 +20,16 @@ const schema = yup.object().shape({
 	tourName: yup.string().required("Vui lòng nhập tourName"),
 	category: yup.string().required("Vui lòng nhập loại tour"),
 	description: yup.string().required("Vui lòng nhập description"),
-	capacity: yup.string().required("Vui lòng nhập capacity"),
+	capacity: yup.number().typeError("Trường này bắt buộc nhập số").required("Trường này bắt buộc nhập"),
 	startDate: yup.string().required("Vui lòng nhập startDate"),
 	endDate: yup.string().required("Vui lòng nhập endDate"),
-	price: yup.string().required("Vui lòng nhập price"),
+	price: yup.number().typeError("Trường này bắt buộc nhập số").required("Trường này bắt buộc nhập"),
 })
 
 const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }: IProps) => {
 	const [categories, setCategories] = useState<any>([])
 	const [params, setQueryParams] = useQueryParams()
-	const { page, limit, category } = params
+	const { page, size, category } = params
 
 	const {
 		register,
@@ -52,9 +53,9 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 
 	const updatePost = async (data: any) => {
 		try {
-			const res = await categoriesAPI.updateCategories(itemTours?.id, {
+			const res = await tourAPI.updateTour(itemTours?.id, {
 				tourName: data.tourName,
-				category: data.category,
+				cateId: data.category,
 				description: data.description,
 				capacity: data.capacity,
 				startDate: data.startDate,
@@ -75,7 +76,7 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 
 	const getDataListCategories = async () => {
 		try {
-		  const data = await categoriesAPI.getCategories()
+		  const data = await categoriesAPI.getCategories({page: page, size: 999})
 		  setCategories(data?.data?.data)
 		} catch (error) {
 		  console.log(error)
@@ -155,7 +156,7 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 							</span>
 							<div className="flex-1">
 							<select {...register("category")} id="crud-form-1" className="form-control w-full" >
-									<option value={itemTours?.cateId} className="hidden" selected >{itemTours?.cateId}</option>
+									<option value={itemTours?.cateId} className="hidden" selected >{itemTours?.cateName}</option>
 									{
 										categories?.map((cate: any) => (
 												<option key={cate?.id} value={cate?.id}>{cate?.name}</option>

@@ -13,10 +13,10 @@ import useQueryParams from "@/hooks/useQueryParams";
 const schema = yup.object().shape({
 	tourName: yup.string().required("Vui lòng nhập tourName"),
 	description: yup.string().required("Vui lòng nhập description"),
-	capacity: yup.string().required("Vui lòng nhập capacity"),
+	capacity: yup.number().typeError("Trường này bắt buộc nhập số").required("Trường này bắt buộc nhập"),
 	startDate: yup.string().required("Vui lòng nhập startDate"),
 	endDate: yup.string().required("Vui lòng nhập endDate"),
-	price: yup.string().required("Vui lòng nhập price"),
+	price: yup.number().typeError("Trường này bắt buộc nhập số").required("Trường này bắt buộc nhập"),
 })
 
 type IProps = {
@@ -54,6 +54,8 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 				tourName: data.tourName,
 				description: data.description,
 				capacity: data.capacity,
+				poster: "sasa",
+				banner: "ok",
 				startDate: data.startDate,
 				endDate: data.endDate,
 				price: data.price,

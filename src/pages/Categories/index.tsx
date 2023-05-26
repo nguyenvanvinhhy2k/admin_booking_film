@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 import ModalAddCategory from '@/components/ModalAddCategory'
 import categoriesAPI from '@/services/categories.service'
 import ModalEditCategory from '@/components/ModalEditCategory'
+import useQueryParams from '@/hooks/useQueryParams'
 
 const Categories = () => {
 	const [showModalAdd, setShowModalAdd] = useState<boolean>(false);
@@ -17,11 +18,15 @@ const Categories = () => {
   const [itemCategory, setItemCategory] = useState<any>({});
   const [idCategory, setIdCategory] = useState<any>();
   const [categories, setCategories] = useState<any>([]);
+	const [totalItem, setTotalItem] = useState<number>(0);
+	const [params, setQueryParams] = useQueryParams()
+	const { page, size, _q } = params
 
   const getDataListCategories = async () => {
     try {
-      const data = await categoriesAPI.getCategories()
+      const data = await categoriesAPI.getCategories({ page: page, _q: _q, size: size})
       setCategories(data?.data?.data)
+			setTotalItem(data?.data?.total)
     } catch (error) {
       console.log(error)
     }
@@ -42,6 +47,19 @@ const Categories = () => {
 		}
   }
 
+	const searchCategories = async () => {
+		setQueryParams({
+			...params, page: 1, size: size
+		}, true)
+		try {
+      const data = await categoriesAPI.getCategories({ page: page, _q: _q, size: size})
+      setCategories(data?.data?.data)
+			setTotalItem(data?.data?.total)
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
   const handleStatus = (id: any) => {
 		setShowModalDelete(true)
     setIdCategory(id)
@@ -52,9 +70,17 @@ const Categories = () => {
 		setItemCategory(item)
 	}
 
-  useEffect(() => {
-    getDataListCategories()
-  }, [])
+	useEffect(() => {
+		if (_q) {
+			getDataListCategories()
+		}
+	}, [page, size])
+
+	useEffect(() => {
+		if (!_q) {
+			getDataListCategories()
+		}
+	}, [_q, page, size])
 
   return (
     <>
@@ -104,7 +130,7 @@ const Categories = () => {
 											<div className="flex items-center gap-5 flex-wrap justify-end">
 												<div className="w-60 relative text-slate-500">
 													<InputSearchDebounce
-                            onChange={() => null}
+                            onChange={(input: string) => setQueryParams({ ...params, page: page, size: size, _q: input?.trim() }, true)}
 														placeholder="Từ khóa"
 														className="form-control box pr-10 w-56 flex-end"
 														delay={400}
@@ -112,7 +138,7 @@ const Categories = () => {
 												</div>
 
 												<div>
-													<button className="btn btn-primary shadow-md px-[13px] mr-2 whitespace-nowrap">
+													<button onClick={searchCategories} className="btn btn-primary shadow-md px-[13px] mr-2 whitespace-nowrap">
 														Tìm
 													</button>
 												</div>
@@ -175,13 +201,13 @@ const Categories = () => {
         </div>
       </div>
       <div className="flex justify-between w-full mt-10">
-        <Pagination
-          pageNumber={1}
-          pageSize={1}
-          totalRow={1}
-          onPageChange={() => null}
-          onChangePageSize={() => null}
-        />
+			<Pagination
+									pageNumber={page}
+									pageSize={size}
+									totalRow={totalItem}
+									onPageChange={(page) => setQueryParams({ page })}
+									onChangePageSize={(size) => setQueryParams({ size })}
+								/>
       </div>
     </>
   )

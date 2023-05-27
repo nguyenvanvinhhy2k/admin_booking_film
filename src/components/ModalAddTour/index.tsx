@@ -16,6 +16,7 @@ const schema = yup.object().shape({
 	capacity: yup.number().typeError("Trường này bắt buộc nhập số").required("Trường này bắt buộc nhập"),
 	startDate: yup.string().required("Vui lòng nhập startDate"),
 	endDate: yup.string().required("Vui lòng nhập endDate"),
+	cateId: yup.string().required("Vui lòng nhập cateId"),
 	price: yup.number().typeError("Trường này bắt buộc nhập số").required("Trường này bắt buộc nhập"),
 })
 
@@ -26,7 +27,10 @@ type IProps = {
 }
 
 const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
-    const [categories, setCategories] = useState<any>([])
+	const [poster, setPoster] = useState<any>(null);
+	const [banner, setBanner] = useState<any>(null);
+	const [files, setFiles] = useState<any>(null)
+  const [categories, setCategories] = useState<any>([])
 	const [params, setQueryParams] = useQueryParams()
 	const { page, limit, category } = params
 	const {
@@ -38,6 +42,7 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 		resolver: yupResolver(schema),
 		defaultValues: {
 			tourName: '',
+			cateId: '',
 			description: '',
 			capacity: '',
 			startDate: '',
@@ -46,21 +51,32 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 		}
 	})
 
+	console.log(files)
+
 	const { errors, isDirty }: any = formState;
 
 	const addTour = async (data: any) => {
+		  // console.log(files)
+      // const formData = new FormData()
+			// console.log(formData)
+      // formData.append("poster", files)
+			// console.log(formData)
 		try {
 			const res = await tourAPI.addTour({
 				tourName: data.tourName,
 				description: data.description,
 				capacity: data.capacity,
-				poster: "sasa",
-				banner: "ok",
+				poster: {
+					poster: "poster"
+				},
+				banner: {
+					banner: "banner"
+				},
 				startDate: data.startDate,
 				endDate: data.endDate,
 				price: data.price,
-				cateId: 1
-			})
+				cateId: data.cateId
+			});
 			if (res?.data?.status === 'error') {
 				toast.error(res?.data?.message)
 			} else {
@@ -89,6 +105,7 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 	useEffect(() => {
 		reset({
 			tourName: '',
+			cateId: '',
 			description: '',
 			capacity: '',
 			startDate: '',
@@ -126,36 +143,25 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 						</p>
 					)}
 				</div>
+				{/* <input type="file" accept="image/*" onChange={handleFileInputPoster} />
+				{poster.imagePreviewUrl && (<img src={poster.imagePreviewUrl} className="w-[80px] h-[80px]" alt="" />)} */}
 
+        <input type="file" accept=".png,.jpeg,.jpg" onChange={(e: any)=> setFiles(e?.target?.files[0])} />
+				{/* {banner.imagePreviewUrl && (<img src={banner.imagePreviewUrl} className="w-[80px] h-[80px]" alt="" />
+				)} */}
 				<div className="my-2">
 						<div className="flex items-center ">
 							<label className="w-[140px] font-medium text-base">Loại tour: </label>
-							<ReactSelect
-								options={categories?.map((cate: any) => {
-									return {
-										value: cate.id,
-										label: cate.name
-									};
-								}
-								)}
-								onChange={(value: any) => {
-									setQueryParams({
-										...params, page: page, limit: limit, category: value ? value.value : undefined
-									}, true)
-								}}
-								className="w-48 flex-1"
-								classNamePrefix="select-input__custom "
-								isClearable
-								value={
-									categories?.filter((item:any) => item.id == category).map((item: any) => {
-										return {
-											value: item._id,
-											label: item.name
-										}
-									})
-								}
-								placeholder="Chọn loại tour"
-							/>
+							<div className="flex-1">
+							<select {...register("cateId")} id="crud-form-1" className="form-control w-full">
+							<option value="" className="hidden" selected >Nhập loại tour</option>
+									{
+										categories?.map((cate: any) => (
+												<option key={cate?.id} value={cate?.id}>{cate?.name}</option>
+										))
+									}
+								</select>
+									</div>
 						</div>
 						{errors?.categories && (
 							<p className="text-sm text-red-700 mt-1 ml-1 m-auto pl-[140px]">

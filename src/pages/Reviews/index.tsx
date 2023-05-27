@@ -3,12 +3,15 @@ import InputSearchDebounce from 'components/Form/InputSearchDebounce'
 import Pagination from 'components/Pagination'
 import 'react-datepicker/dist/react-datepicker.css'
 import ReactSelect from 'react-select'
-import { Edit, Plus, X } from 'lucide-react'
+import { Edit, Plus, Trash2, X } from 'lucide-react'
 import Modal from '@/components/Modal'
 import { toast } from 'react-toastify'
 import ModalEditTicket from '@/components/ModalEditCategory'
 import ModalAddTicket from '@/components/ModalAddCategory'
 import reviewAPI from '@/services/reviews.service'
+import dayjs from 'dayjs'
+import useQueryParams from '@/hooks/useQueryParams'
+import { useAuth } from '@/contexts/auth'
 
 const Reviews = () => {
 	const [showModalAdd, setShowModalAdd] = useState<boolean>(false);
@@ -17,11 +20,16 @@ const Reviews = () => {
   const [itemReviews, setItemReviews] = useState<any>({});
   const [idReviews, setIdReviews] = useState<any>();
   const [reviews, setReviews] = useState<any>([]);
+	const [totalItem, setTotalItem] = useState<number>(0);
+	const [params, setQueryParams] = useQueryParams()
+	const { page, size, _q } = params
+	const { user } = useAuth()
 
   const getDataListReviews = async () => {
     try {
-      const data = await reviewAPI.getReviews()
+      const data = await reviewAPI.getReviews({ page: page, _q: _q, size: size})
       setReviews(data?.data?.data)
+			setTotalItem(data?.data?.total)
     } catch (error) {
       console.log(error)
     }
@@ -42,6 +50,25 @@ const Reviews = () => {
 		}
   }
 
+	const searchReviews = async () => {
+		setQueryParams({
+			...params, page: 1, size: size
+		}, true)
+    try {
+      const data = await reviewAPI.getReviews({ page: page, _q: _q, size: size})
+      setReviews(data?.data?.data)
+			setTotalItem(data?.data?.total)
+    } catch (error) {
+      console.log(error)
+    }
+	}
+
+
+	const formatDate = (date: Date, format: string) => {
+		return dayjs(date).format(format);
+	}
+
+
   const handleStatus = (id: any) => {
 		setShowModalDelete(true)
     setIdReviews(id)
@@ -52,9 +79,17 @@ const Reviews = () => {
 		setItemReviews(item)
 	}
 
-  useEffect(() => {
-    getDataListReviews()
-  }, [])
+	useEffect(() => {
+		if (_q) {
+			getDataListReviews()
+		}
+	}, [page, size])
+
+	useEffect(() => {
+		if (!_q) {
+			getDataListReviews()
+		}
+	}, [_q, page, size])
 
   return (
     <>
@@ -74,12 +109,12 @@ const Reviews = () => {
 				}}
 			/> */}
       <Modal
-				title="Xóa user"
+				title="Xóa comment"
 				open={showModalDelete}
 				handleCancel={() => setShowModalDelete(false)}
 				handleConfirm={handleConfirmDelete}
 			>
-				Bạn chắc chắn muốn Xóa tour này chứ?
+				Bạn chắc chắn muốn Xóa comment này chứ?
 			</Modal>
       <div className="wrapper">
         <div className="wrapper-box">
@@ -93,18 +128,12 @@ const Reviews = () => {
                 <div className="intro-y box">
                 <div className="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 justify-between">
 											<div className="flex items-center">
-												<div className="btn btn-primary mr-2 shadow-md w-full" onClick={() => setShowModalAdd(true)}>
-													<span className="flex h-4 w-8 items-center justify-center">
-														<Plus />
-													</span>
-													Thêm mới
-												</div>
 											</div>
 										<div className="flex items-center font-medium ">
 											<div className="flex items-center gap-5 flex-wrap justify-end">
 												<div className="w-60 relative text-slate-500">
 													<InputSearchDebounce
-                            onChange={() => null}
+                             onChange={(input: string) => setQueryParams({ ...params, page: page, size: size, _q: input?.trim() }, true)}
 														placeholder="Từ khóa"
 														className="form-control box pr-10 w-56 flex-end"
 														delay={400}
@@ -112,7 +141,7 @@ const Reviews = () => {
 												</div>
 
 												<div>
-													<button className="btn btn-primary shadow-md px-[13px] mr-2 whitespace-nowrap">
+													<button onClick={searchReviews} className="btn btn-primary shadow-md px-[13px] mr-2 whitespace-nowrap">
 														Tìm
 													</button>
 												</div>
@@ -146,20 +175,18 @@ const Reviews = () => {
                                       <td>{item?.tours?.tourName}</td>
                                       <td>{item?.comment}</td>
                                       <td>{item?.rating}</td>
-                                      <td>{item?.createdAt}</td>
+                                      <td>{item?.createdAt && formatDate(item?.createdAt, "DD/MM/YYYY HH:mm:ss")}</td>
                                       <td className="table-report__action w-[1%] border-l whitespace-nowrap lg:whitespace-normal">
-                                        <div className="flex items-center justify-around">
-                                          <div className="cursor-pointer font-semibold text-sky-600 hover:opacity-60 flex items-center" onClick={() => handleUpdate(item)}>
+                                        <div className="flex items-center justify-betweeen">
+                                          <div className={ `font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => {if(user?.role === "ADMIN") handleUpdate(item)}}>
                                             <div className='inline-block' />
                                             <Edit className='mr-1.5 inline-block' size={16} />
                                             <div>
-                                              <span>Sửa</span>
                                             </div>
                                           </div>
-                                          <div className="w-[50px] cursor-pointer font-semibold text-danger  hover:opacity-60 flex items-center ml-[20px]" onClick={() => handleStatus(item.id)}>
+                                          <div className={ `font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => {if(user?.role === "ADMIN") handleStatus(item.id)}}>
                                             <div className="flex items-center justify-start text-danger">
-                                              <X className="mr-1.5" size={20} />
-                                              Xóa
+                                              <Trash2 className="mr-1.5" size={20} />
                                             </div>
                                           </div>
                                         </div>
@@ -181,13 +208,13 @@ const Reviews = () => {
         </div>
       </div>
       <div className="flex justify-between w-full mt-10">
-        <Pagination
-          pageNumber={1}
-          pageSize={1}
-          totalRow={1}
-          onPageChange={() => null}
-          onChangePageSize={() => null}
-        />
+			<Pagination
+									pageNumber={page}
+									pageSize={size}
+									totalRow={totalItem}
+									onPageChange={(page) => setQueryParams({ page })}
+									onChangePageSize={(size) => setQueryParams({ size })}
+								/>
       </div>
     </>
   )

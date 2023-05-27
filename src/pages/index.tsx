@@ -31,6 +31,7 @@ export default function Home() {
     labels: [],
     datasets: [{}]
   })
+
 	const [tours, setTours] = useState<any>()
 	const [category, setCategory] = useState<any>()
 	const [booking, setBooking] = useState<any>()

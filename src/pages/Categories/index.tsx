@@ -3,13 +3,14 @@ import InputSearchDebounce from 'components/Form/InputSearchDebounce'
 import Pagination from 'components/Pagination'
 import 'react-datepicker/dist/react-datepicker.css'
 import ReactSelect from 'react-select'
-import { Edit, Plus, X } from 'lucide-react'
+import { Edit, Plus, Trash2, X } from 'lucide-react'
 import Modal from '@/components/Modal'
 import { toast } from 'react-toastify'
 import ModalAddCategory from '@/components/ModalAddCategory'
 import categoriesAPI from '@/services/categories.service'
 import ModalEditCategory from '@/components/ModalEditCategory'
 import useQueryParams from '@/hooks/useQueryParams'
+import { useAuth } from '@/contexts/auth'
 
 const Categories = () => {
 	const [showModalAdd, setShowModalAdd] = useState<boolean>(false);
@@ -21,6 +22,7 @@ const Categories = () => {
 	const [totalItem, setTotalItem] = useState<number>(0);
 	const [params, setQueryParams] = useQueryParams()
 	const { page, size, _q } = params
+	const { user } = useAuth()
 
   const getDataListCategories = async () => {
     try {
@@ -105,7 +107,7 @@ const Categories = () => {
 				handleCancel={() => setShowModalDelete(false)}
 				handleConfirm={handleConfirmDelete}
 			>
-				Bạn chắc chắn muốn Xóa ticket này chứ?
+				Bạn chắc chắn muốn Xóa category này chứ?
 			</Modal>
       <div className="wrapper">
         <div className="wrapper-box">
@@ -119,12 +121,14 @@ const Categories = () => {
                 <div className="intro-y box">
                 <div className="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 justify-between">
 											<div className="flex items-center">
+											{user?.role === "ADMIN" ? (
 												<div className="btn btn-primary mr-2 shadow-md w-full" onClick={() => setShowModalAdd(true)}>
-													<span className="flex h-4 w-8 items-center justify-center">
-														<Plus />
-													</span>
-													Thêm mới
-												</div>
+												<span className="flex h-4 w-8 items-center justify-center">
+													<Plus />
+												</span>
+												Thêm mới
+											</div>)
+												: ("") }
 											</div>
 										<div className="flex items-center font-medium ">
 											<div className="flex items-center gap-5 flex-wrap justify-end">
@@ -168,18 +172,16 @@ const Categories = () => {
                                       <td>{item.name}</td>
                                       <td>{item.description}</td>
                                       <td className="table-report__action w-[1%] border-l whitespace-nowrap lg:whitespace-normal">
-                                        <div className="flex items-center justify-around">
-                                          <div className="cursor-pointer font-semibold text-sky-600 hover:opacity-60 flex items-center" onClick={() => handleUpdate(item)}>
+                                        <div className="flex items-center justify-between">
+                                          <div className={ `font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => {if(user?.role === "ADMIN") handleUpdate(item)}}>
                                             <div className='inline-block' />
                                             <Edit className='mr-1.5 inline-block' size={16} />
                                             <div>
-                                              <span>Sửa</span>
                                             </div>
                                           </div>
-                                          <div className="w-[50px] cursor-pointer font-semibold text-danger  hover:opacity-60 flex items-center ml-[20px]" onClick={() => handleStatus(item.id)}>
+                                          <div className={ `font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => {if(user?.role === "ADMIN") handleStatus(item.id)}}>
                                             <div className="flex items-center justify-start text-danger">
-                                              <X className="mr-1.5" size={20} />
-                                              Xóa
+                                              <Trash2 className="mr-1.5" size={20} />
                                             </div>
                                           </div>
                                         </div>

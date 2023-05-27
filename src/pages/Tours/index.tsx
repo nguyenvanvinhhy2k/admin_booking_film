@@ -3,7 +3,7 @@ import InputSearchDebounce from 'components/Form/InputSearchDebounce'
 import Pagination from 'components/Pagination'
 import 'react-datepicker/dist/react-datepicker.css'
 import ReactSelect from 'react-select'
-import { Edit, Plus, X } from 'lucide-react'
+import { Edit, Plus, Trash2, X } from 'lucide-react'
 import Modal from '@/components/Modal'
 import { toast } from 'react-toastify'
 import tourAPI from '@/services/tours.service'
@@ -11,6 +11,8 @@ import ModalAddTour from '@/components/ModalAddTour'
 import ModalEditTour from '@/components/ModalEditTour'
 import useQueryParams from '@/hooks/useQueryParams'
 import categoriesAPI from '@/services/categories.service'
+import dayjs from "dayjs";
+import { useAuth } from '@/contexts/auth'
 
 const Tours = () => {
 	const [showModalAdd, setShowModalAdd] = useState<boolean>(false);
@@ -22,8 +24,7 @@ const Tours = () => {
 	const [totalItem, setTotalItem] = useState<number>(0);
 	const [params, setQueryParams] = useQueryParams()
 	const { page, size, _q } = params
-
-	console.log(tours)
+	const { user } = useAuth()
 
   const getDataListTours = async () => {
     try {
@@ -72,6 +73,10 @@ const Tours = () => {
 		} catch (error) {
 			console.log(error)
 		}
+	}
+
+	const formatDate = (date: Date, format: string) => {
+		return dayjs(date).format(format);
 	}
 
   const handleStatus = (id: any) => {
@@ -133,12 +138,14 @@ const Tours = () => {
                 <div className="intro-y box">
                 <div className="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 justify-between">
 											<div className="flex items-center">
+											{user?.role === "ADMIN" ? (
 												<div className="btn btn-primary mr-2 shadow-md w-full" onClick={() => setShowModalAdd(true)}>
-													<span className="flex h-4 w-8 items-center justify-center">
-														<Plus />
-													</span>
-													Thêm mới
-												</div>
+												<span className="flex h-4 w-8 items-center justify-center">
+													<Plus />
+												</span>
+												Thêm mới
+											</div>)
+												: ("") }
 											</div>
 										<div className="flex items-center font-medium ">
 											<div className="flex items-center gap-5 flex-wrap justify-end">
@@ -169,6 +176,8 @@ const Tours = () => {
                               <th className="whitespace-nowrap">ID</th>
                               <th className="whitespace-nowrap">Tên tour</th>
                               <th className="whitespace-nowrap">Loại tour</th>
+															<th className="whitespace-nowrap">Ảnh poster</th>
+                              <th className="whitespace-nowrap">Ảnh banner</th>
                               <th className="whitespace-nowrap">Mô tả</th>
                               <th className="whitespace-nowrap">Thời gian bắt đầu</th>
                               <th className="whitespace-nowrap">Thời gian kết thúc</th>
@@ -186,24 +195,24 @@ const Tours = () => {
                                       <td>{item.id}</td>
                                       <td>{item.tourName}</td>
                                       <td>{item?.cateName}</td>
+																			<td>{item.poster}</td>
+                                      <td>{item?.banner}</td>
                                       <td>{item.description}</td>
-                                      <td>{item.startDate}</td>
-                                      <td>{item.endDate}</td>
+                                      <td>{item?.startDate && formatDate(item?.startDate, "DD/MM/YYYY")}</td>
+                                      <td>{item?.endDate && formatDate(item?.endDate, "DD/MM/YYYY")}</td>
                                       <td>{item.price}</td>
 																			<td>{item.capacity}</td>
                                       <td className="table-report__action w-[1%] border-l whitespace-nowrap lg:whitespace-normal">
-                                        <div className="flex items-center justify-around">
-                                          <div className="cursor-pointer font-semibold text-sky-600 hover:opacity-60 flex items-center" onClick={() => handleUpdate(item)}>
+                                        <div className="flex items-center justify-between">
+                                          <div className={ `font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => {if(user?.role === "ADMIN") handleUpdate(item)} }>
                                             <div className='inline-block' />
                                             <Edit className='mr-1.5 inline-block' size={16} />
                                             <div>
-                                              <span>Sửa</span>
                                             </div>
                                           </div>
-                                          <div className="w-[50px] cursor-pointer font-semibold text-danger  hover:opacity-60 flex items-center ml-[20px]" onClick={() => handleStatus(item.id)}>
+                                          <div className={ `font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => {if(user?.role === "ADMIN") handleStatus(item.id)}}>
                                             <div className="flex items-center justify-start text-danger">
-                                              <X className="mr-1.5" size={20} />
-                                              Xóa
+                                              <Trash2 className="mr-1.5" size={20} />
                                             </div>
                                           </div>
                                         </div>

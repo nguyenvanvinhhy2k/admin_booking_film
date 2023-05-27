@@ -9,6 +9,9 @@ import categoriesAPI from "@/services/categories.service";
 import tourAPI from "@/services/tours.service";
 import ReactSelect from 'react-select';
 import useQueryParams from "@/hooks/useQueryParams";
+import axios from "axios";
+import { getCachedData } from "@/utils/storage";
+import { ACCESS_TOKEN } from "@/contants/auth";
 
 const schema = yup.object().shape({
 	tourName: yup.string().required("Vui lòng nhập tourName"),
@@ -54,29 +57,30 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 	console.log(files)
 
 	const { errors, isDirty }: any = formState;
+	const accessToken = getCachedData(ACCESS_TOKEN)
 
 	const addTour = async (data: any) => {
-		  // console.log(files)
-      // const formData = new FormData()
-			// console.log(formData)
-      // formData.append("poster", files)
-			// console.log(formData)
+      const formData = new FormData()
+      formData.append("tourName", data.tourName)
+      formData.append("description", data.description)
+      formData.append("capacity", data.capacity)
+      formData.append("banner", files) //flie của banner
+      formData.append("poster", files) //file của poster
+      formData.append("startDate", data.startDate)
+      formData.append("endDate", data.endDat)
+      formData.append("price", data.price)
+      formData.append("cateId", data.cateId)
 		try {
-			const res = await tourAPI.addTour({
-				tourName: data.tourName,
-				description: data.description,
-				capacity: data.capacity,
-				poster: {
-					poster: "poster"
+			const res = await axios({
+				method: 'post',
+				url: 'http://localhost:8228/tours',
+				headers: {
+					Authorization: 'Bearer ' + accessToken, //the token is a variable which holds the token
+					"Content-Type": `multipart/form-data; boundary=${formData}`
 				},
-				banner: {
-					banner: "banner"
-				},
-				startDate: data.startDate,
-				endDate: data.endDate,
-				price: data.price,
-				cateId: data.cateId
-			});
+				data: formData
+			})
+			//check lại res 
 			if (res?.data?.status === 'error') {
 				toast.error(res?.data?.message)
 			} else {

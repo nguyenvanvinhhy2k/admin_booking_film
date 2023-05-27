@@ -3,7 +3,7 @@ import InputSearchDebounce from 'components/Form/InputSearchDebounce'
 import Pagination from 'components/Pagination'
 import 'react-datepicker/dist/react-datepicker.css'
 import ReactSelect from 'react-select'
-import { Edit, Plus, X } from 'lucide-react'
+import { Edit, Eye, Plus, X } from 'lucide-react'
 import Modal from '@/components/Modal'
 import { toast } from 'react-toastify'
 import ticketAPI from '@/services/tours.service'
@@ -128,11 +128,10 @@ const Bookings = () => {
                           <thead className="table-dark">
                             <tr className="text-center">
                               <th className="whitespace-nowrap">ID</th>
-                              <th className="whitespace-nowrap">Họ tên</th>
-                              <th className="whitespace-nowrap">Username</th>
-                              <th className="whitespace-nowrap">Role</th>
-                              <th className="whitespace-nowrap">Email</th>
-                              <th className="whitespace-nowrap">SĐT</th>
+                              <th className="whitespace-nowrap">Người đặt</th>
+                              <th className="whitespace-nowrap">Thời gian đặt</th>
+                              <th className="whitespace-nowrap">Ngày khởi hành</th>
+                              <th className="whitespace-nowrap">Trạng thái</th>
                               <th className="whitespace-nowrap">Operation</th>
                             </tr>
                           </thead>
@@ -143,24 +142,27 @@ const Bookings = () => {
                                   <>
                                     <tr className="text-center">
                                       <td>{item.id}</td>
-                                      <td>{item.name}</td>
-                                      <td>{item.username}</td>
-                                      <td>{item.role}</td>
-                                      <td>{item.email}</td>
-                                      <td>{item.phoneNumber}</td>
+                                      <td>{item.user.name}</td>
+                                      <td>{item.createdAt}</td>
+                                      <td>{item.bookingDate}</td>
+                                      <td>{item.status}</td>
                                       <td className="table-report__action w-[1%] border-l whitespace-nowrap lg:whitespace-normal">
-                                        <div className="flex items-center justify-around">
+                                        <div className="flex items-center justify-between">
+																				<div className=" cursor-pointer font-semibold text-sky-600 hover:opacity-60 flex items-center" onClick={() => handleUpdate(item)}>
+                                            <div className='inline-block' />
+                                            <Eye className='mr-1.5 inline-block' size={16} />
+                                            <div>
+                                            </div>
+                                          </div>
                                           <div className="cursor-pointer font-semibold text-sky-600 hover:opacity-60 flex items-center" onClick={() => handleUpdate(item)}>
                                             <div className='inline-block' />
                                             <Edit className='mr-1.5 inline-block' size={16} />
                                             <div>
-                                              <span>Sửa</span>
                                             </div>
                                           </div>
-                                          <div className="w-[50px] cursor-pointer font-semibold text-danger  hover:opacity-60 flex items-center ml-[20px]" onClick={() => handleStatus(item.id)}>
+                                          <div className="cursor-pointer font-semibold text-danger  hover:opacity-60 flex items-center" onClick={() => handleStatus(item.id)}>
                                             <div className="flex items-center justify-start text-danger">
                                               <X className="mr-1.5" size={20} />
-                                              Xóa
                                             </div>
                                           </div>
                                         </div>

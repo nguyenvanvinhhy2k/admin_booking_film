@@ -127,11 +127,11 @@ const Reviews = () => {
                           <thead className="table-dark">
                             <tr className="text-center">
                               <th className="whitespace-nowrap">ID</th>
-                              <th className="whitespace-nowrap">Họ tên</th>
-                              <th className="whitespace-nowrap">Username</th>
-                              <th className="whitespace-nowrap">Role</th>
-                              <th className="whitespace-nowrap">Email</th>
-                              <th className="whitespace-nowrap">SĐT</th>
+                              <th className="whitespace-nowrap">Người commnet</th>
+                              <th className="whitespace-nowrap">Tour</th>
+                              <th className="whitespace-nowrap">Comment</th>
+                              <th className="whitespace-nowrap">Đánh giá</th>
+                              <th className="whitespace-nowrap">Thời gian comment</th>
                               <th className="whitespace-nowrap">Operation</th>
                             </tr>
                           </thead>
@@ -142,11 +142,11 @@ const Reviews = () => {
                                   <>
                                     <tr className="text-center">
                                       <td>{item.id}</td>
-                                      <td>{item.name}</td>
-                                      <td>{item.username}</td>
-                                      <td>{item.role}</td>
-                                      <td>{item.email}</td>
-                                      <td>{item.phoneNumber}</td>
+                                      <td>{item?.user?.name}</td>
+                                      <td>{item?.tours?.tourName}</td>
+                                      <td>{item?.comment}</td>
+                                      <td>{item?.rating}</td>
+                                      <td>{item?.createdAt}</td>
                                       <td className="table-report__action w-[1%] border-l whitespace-nowrap lg:whitespace-normal">
                                         <div className="flex items-center justify-around">
                                           <div className="cursor-pointer font-semibold text-sky-600 hover:opacity-60 flex items-center" onClick={() => handleUpdate(item)}>

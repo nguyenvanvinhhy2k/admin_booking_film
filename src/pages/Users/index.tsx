@@ -211,13 +211,13 @@ const Users = () => {
         </div>
       </div>
       <div className="flex justify-between w-full mt-10">
-        <Pagination
-          pageNumber={1}
-          pageSize={1}
-          totalRow={1}
-          onPageChange={() => null}
-          onChangePageSize={() => null}
-        />
+			<Pagination
+									pageNumber={page}
+									pageSize={size}
+									totalRow={totalItem}
+									onPageChange={(page) => setQueryParams({ page })}
+									onChangePageSize={(size) => setQueryParams({ size })}
+								/>
       </div>
     </>
   )

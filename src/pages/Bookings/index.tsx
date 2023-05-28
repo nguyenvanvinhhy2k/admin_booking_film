@@ -13,6 +13,25 @@ import ModalViewBookings from '@/components/ModalViewBookings'
 import useQueryParams from '@/hooks/useQueryParams'
 import { useAuth } from '@/contexts/auth'
 
+const actionsStatus = [
+	{
+		value: "DADAT",
+		label: "Chờ xử lí"
+	},
+	{
+		value: "DAXACNHAN",
+		label: "Đặt thành công"
+	},
+	{
+		value: "HUYTOUR",
+		label: "Đã hủy"
+	},
+	{
+		value: "DAHOANTHANHTOUR",
+		label: "Đã hoàn thành"
+	}
+]
+
 const Bookings = () => {
 	const [showModalView, setShowModalView] = useState<boolean>(false);
   const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
@@ -22,12 +41,12 @@ const Bookings = () => {
   const [bookings, setBookings] = useState<any>([]);
 	const [totalItem, setTotalItem] = useState<number>(0);
 	const [params, setQueryParams] = useQueryParams()
-	const { page, size, _q } = params
+	const { page, size, _q, status } = params
 	const { user } = useAuth()
 
   const getDataListBookings = async () => {
     try {
-      const data = await bookingAPI.getBookings({ page: page, _q: _q, size: size})
+      const data = await bookingAPI.getBookings({ page: page, _q: _q, size: size, status})
       setBookings(data?.data?.data)
 			setTotalItem(data?.data?.total)
     } catch (error) {
@@ -55,7 +74,7 @@ const Bookings = () => {
 			...params, page: 1, size: size
 		}, true)
     try {
-      const data = await bookingAPI.getBookings({ page: page, _q: _q, size: size})
+      const data = await bookingAPI.getBookings({ page: page, _q: _q, size: size, status})
       setBookings(data?.data?.data)
 			setTotalItem(data?.data?.total)
     } catch (error) {
@@ -83,16 +102,16 @@ const Bookings = () => {
 	}
 
 	useEffect(() => {
-		if (_q) {
+		if (_q || status) {
 			getDataListBookings()
 		}
 	}, [page, size])
 
 	useEffect(() => {
-		if (!_q) {
+		if (!_q && !status) {
 			getDataListBookings()
 		}
-	}, [_q, page, size])
+	}, [_q, page, size, status])
 
   return (
     <>
@@ -134,7 +153,27 @@ const Bookings = () => {
 											<div className="flex items-center">
 											</div>
 										<div className="flex items-center font-medium ">
-											<div className="flex items-center gap-5 flex-wrap justify-end">
+										<div className="flex items-center w-full mr-[20px]">
+													<label className="mr-2">Trạng thái: </label>
+													<ReactSelect
+														options={actionsStatus?.map((type: { value: string, label: string }) => {
+															return {
+																value: type?.value,
+																label: type?.label
+															};
+														}
+														)}
+														onChange={(type: any) => {
+															setQueryParams({
+																...params, page: page, size: size, status: type?.value,
+															}, true)
+														}}
+														isClearable
+														classNamePrefix="select-input__custom "
+														placeholder="Chọn trạng thái ..."
+													/>
+												</div>
+											<div className="flex items-center gap-5 justify-end">
 												<div className="w-60 relative text-slate-500">
 													<InputSearchDebounce
                             onChange={(input: string) => setQueryParams({ ...params, page: page, size: size, _q: input?.trim() }, true)}
@@ -179,7 +218,7 @@ const Bookings = () => {
                                       <td>{item.user.name}</td>
                                       <td>{item?.createdAt && formatDate(item?.createdAt, "DD/MM/YYYY HH:mm:ss")}</td>
                                       <td>{item?.bookingDate && formatDate(item?.bookingDate, "DD/MM/YYYY")}</td>
-                                      <td>{item.status}</td>
+																			<td className={`${item?.status === "DADAT" ? "text-[#FFCC00]" : item.status === "DAXACNHAN" ? "text-[#0066FF]" : item.status === "HUYTOUR" ? "text-[#CC0000]" : item?.status === "DAHOANTHANHTOUR" && "text-[#00CC00]" }`}>{item?.status === "DADAT" ? "Chờ xác nhận" : item.status === "DAXACNHAN" ? "Đã xác nhận" : item.status === "HUYTOUR" ? "Đã hủy" : item?.status === "DAHOANTHANHTOUR" && "Đã hoàn thành" }</td>
                                       <td className="table-report__action w-[1%] border-l whitespace-nowrap lg:whitespace-normal">
                                         <div className="flex items-center justify-between">
 																				<div className={ `font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => { if(user?.role === "ADMIN") handleView(item)}}>

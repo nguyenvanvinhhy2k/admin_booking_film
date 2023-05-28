@@ -24,18 +24,23 @@ const schema = yup.object().shape({
 	status: yup.string().required("Trường này bắt buộc nhập"),
 })
 
+
 const actionsStatus = [
 	{
-		value: "WATING",
-		label: "WATING"
+		value: "DADAT",
+		label: "Chờ xử lí"
 	},
 	{
-		value: 'ACCEPTED',
-		label: "ACCEPTED"
+		value: "DAXACNHAN",
+		label: "Đặt thành công"
 	},
 	{
-		value: 'CANCELED',
-		label: "CANCELED"
+		value: "HUYTOUR",
+		label: "Đã hủy"
+	},
+	{
+		value: "DAHOANTHANHTOUR",
+		label: "Đã hoàn thành"
 	}
 ]
 
@@ -191,7 +196,7 @@ const ModalEditBookings = ({ showModalEdit, setShowModalEdit, itemBookings, call
 							<span className="w-[140px] font-medium text-base">Trạng thái:</span>
 							<div className="flex-1">
 							<select {...register("status")} id="crud-form-1" className="form-control w-full" >
-									<option value={itemBookings?.status} className="hidden" selected >{itemBookings?.status}</option>
+									<option value={itemBookings?.status} className="hidden" selected >{itemBookings?.status === "DADAT" ? "Chờ xác nhận" : itemBookings.status === "DAXACNHAN" ? "Đã xác nhận" : itemBookings.status === "HUYTOUR" ? "Đã hủy" : itemBookings?.status === "DAHOANTHANHTOUR" && "Đã hoàn thành tour" }</option>
 									{
 										actionsStatus?.map((cate: any) => (
 												<option key={cate?.value} value={cate?.value}>{cate?.label}</option>

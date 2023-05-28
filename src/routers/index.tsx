@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Layout from 'components/Layout'
 import PrivateRouter from './privateRouter'
+import LoadingCricle from '@/components/Loading/loadingCricle'
 
 const SignIn = lazy(() => import('../pages/Signin'))
 const SignUp = lazy(() => import('../pages/SignUp'))
@@ -22,7 +23,7 @@ const AppRouter = () => {
 			<Route
 				path="/"
 				element={
-					<Suspense>
+					<Suspense fallback={<LoadingCricle />}>
 					 <PrivateRouter >
 						<Layout>
 							<Home />
@@ -34,7 +35,7 @@ const AppRouter = () => {
 			<Route
 				path="/users"
 				element={
-					<Suspense>
+					<Suspense fallback={<LoadingCricle />}>
 						 <PrivateRouter >
 						<Layout>
 							<Users />
@@ -46,7 +47,7 @@ const AppRouter = () => {
 			<Route
 				path="/tours"
 				element={
-					<Suspense>
+					<Suspense fallback={<LoadingCricle />}>
 						 <PrivateRouter >
 						<Layout>
 							<Tours />
@@ -58,7 +59,7 @@ const AppRouter = () => {
 			<Route
 				path="/categories"
 				element={
-					<Suspense>
+					<Suspense fallback={<LoadingCricle />}>
 						 <PrivateRouter >
 						<Layout>
 							<Categories />
@@ -70,7 +71,7 @@ const AppRouter = () => {
 			<Route
 				path="/bookings"
 				element={
-					<Suspense>
+					<Suspense fallback={<LoadingCricle />}>
 						 <PrivateRouter >
 						<Layout>
 							<Bookings />
@@ -82,7 +83,7 @@ const AppRouter = () => {
 			<Route
 				path="/reviews"
 				element={
-					<Suspense>
+					<Suspense fallback={<LoadingCricle />}>
 						 <PrivateRouter >
 						<Layout>
 							<Reviews />

@@ -183,7 +183,10 @@ const Tours = () => {
                               <th className="whitespace-nowrap">Thời gian kết thúc</th>
                               <th className="whitespace-nowrap">Giá tiền</th>
 															<th className="whitespace-nowrap">Số lượng</th>
-                              <th className="whitespace-nowrap">Chức năng</th>
+															<th className="whitespace-nowrap">Phương tiện</th>
+															<th className="whitespace-nowrap">Xuất phát</th>
+                              <th className="whitespace-nowrap">Địa điểm</th>
+															<th className="whitespace-nowrap">Chức năng</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -195,13 +198,16 @@ const Tours = () => {
                                       <td>{item.id}</td>
                                       <td>{item.tourName}</td>
                                       <td>{item?.cateName}</td>
-																			<td>{item.poster}</td>
-                                      <td>{item?.banner}</td>
+																			<td><img src={`http://localhost:8228/files/${item.poster}`} alt="" /></td>
+                                      <td><img src={`http://localhost:8228/files/${item?.banner}`} alt="" /></td>
                                       <td>{item.description}</td>
                                       <td>{item?.startDate && formatDate(item?.startDate, "DD/MM/YYYY")}</td>
                                       <td>{item?.endDate && formatDate(item?.endDate, "DD/MM/YYYY")}</td>
-                                      <td>{item.price}</td>
+                                      <td>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item?.price)}</td>
 																			<td>{item.capacity}</td>
+																			<td>{item.transport}</td>
+                                      <td>{item.startLocation}</td>
+                                      <td>{item?.listLocation}</td>
                                       <td className="table-report__action w-[1%] border-l whitespace-nowrap lg:whitespace-normal">
                                         <div className="flex items-center justify-between">
                                           <div className={ `font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => {if(user?.role === "ADMIN") handleUpdate(item)} }>

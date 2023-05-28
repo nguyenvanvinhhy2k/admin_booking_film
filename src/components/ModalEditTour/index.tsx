@@ -8,6 +8,9 @@ import categoriesAPI from "@/services/categories.service";
 import ReactSelect from 'react-select';
 import useQueryParams from "@/hooks/useQueryParams";
 import tourAPI from "@/services/tours.service";
+import axios from "axios";
+import { getCachedData } from "@/utils/storage";
+import { ACCESS_TOKEN } from "@/contants/auth";
 
 type IProps = {
 	itemTours: Object | any
@@ -27,9 +30,13 @@ const schema = yup.object().shape({
 })
 
 const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }: IProps) => {
+	const [poster, setPoster] = useState<any>();
+	const [banner, setBanner] = useState<any>();
 	const [categories, setCategories] = useState<any>([])
 	const [params, setQueryParams] = useQueryParams()
-	const { page, size, category } = params
+	const { page } = params
+
+	console.log(itemTours)
 
 	const {
 		register,
@@ -46,21 +53,39 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 			startDate: itemTours.startDate,
 			endDate: itemTours.endDaterName,
 			price: itemTours.price,
+			transport: itemTours.transport,
+			startLocation: itemTours.startLocation,
+			listLocation: itemTours.listLocation,
 		}
 	})
 
 	const { errors, isDirty }: any = formState;
+	const accessToken = getCachedData(ACCESS_TOKEN)
 
 	const updatePost = async (data: any) => {
+		const formData = new FormData()
+		formData.append("tourName", data.tourName)
+		formData.append("description", data.description)
+		formData.append("capacity", data.capacity)
+		formData.append("banner", banner ? banner : itemTours.banner) //flie của banner
+		formData.append("poster", poster ? poster : itemTours.poster) //file của poster
+		formData.append("startDate", data.startDate)
+		formData.append("endDate", data.endDate)
+		formData.append("price", data.price)
+		formData.append("cateId", data.category)
+		formData.append("transport", data.transport)
+		formData.append("startLocation", data.startLocation)
+		formData.append("listLocation", data.listLocation)
+		formData.append("code", itemTours.code)
 		try {
-			const res = await tourAPI.updateTour(itemTours?.id, {
-				tourName: data.tourName,
-				cateId: data.category,
-				description: data.description,
-				capacity: data.capacity,
-				startDate: data.startDate,
-				endDate: data.endDate,
-				price: data.price,
+			const res = await axios({
+				method: 'patch',
+				url: `http://localhost:8228/tours/${itemTours.id}`,
+				headers: {
+					Authorization: 'Bearer ' + accessToken, //the token is a variable which holds the token
+					"Content-Type": `multipart/form-data; boundary=${formData}`
+				},
+				data: formData
 			})
 			setShowModalEdit(false)
 			if (res?.data?.status === 'error') {
@@ -68,6 +93,9 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 			} else {
 				callBack && callBack()
 				toast.success('Lưu thông tin thành công.')
+				setBanner(null)
+				setPoster(null)
+				setShowModalEdit(false)
 			}
 		} catch (error) {
 			console.log(error)
@@ -96,6 +124,9 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 			startDate: itemTours.startDate,
 			endDate: itemTours.endDate,
 			price: itemTours.price,
+			transport: itemTours.transport,
+			startLocation: itemTours.startLocation,
+			listLocation: itemTours.listLocation,
 		})
 	}, [itemTours, setShowModalEdit, showModalEdit])
 	return (
@@ -103,12 +134,18 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 			<Modal
 				title="Sửa thông tin tour"
 				open={showModalEdit}
-				handleCancel={() => setShowModalEdit(false)}
+				handleCancel={() => {
+					setShowModalEdit(false)
+					setBanner(null),
+					setPoster(null)}
+				}
 				handleConfirm={handleSubmit(updatePost)}
-				className="w-full max-w-[475px]"
+				className="w-full max-w-[70%]"
 				confirmButtonTitle="Lưu"
 			>
 				<div className="flex flex-col">
+				<div className="flex justify-between px-[20px]">
+					<div className="">
 					<div className="my-2">
 						<div className="flex items-center">
 							<span className="w-[140px] font-medium text-base">
@@ -129,6 +166,33 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 							</p>
 						)}
 					</div>
+
+					<div className="my-2">
+				<div className="flex items-center">
+						<span className="w-[140px] font-medium text-base">
+							Chọn banner:
+						</span>
+						<div className=" w-[69%] flex items-center justify-between">
+							<input type="file" accept=".png,.jpeg,.jpg" onChange={(e: any) => {if(e.target.files.length !== 0) setBanner(e?.target?.files[0])}} />
+							{banner ? (<><img src={URL.createObjectURL(banner)} className="w-[80px] h-[80px]" alt="" />
+								<div className="shareX ml-[10px] cursor-pointer" onClick={() => setBanner(null)}>X</div></>
+							): (<img src={`http://localhost:8228/files/${itemTours?.banner}`} className="w-[80px] h-[80px]" alt="" />)}
+						</div>
+					</div>
+				</div>
+				<div className="my-2">
+					<div className="flex items-center">
+						<span className="w-[140px] font-medium text-base">
+							Chọn poster:
+						</span>
+						<div className=" w-[69%] flex items-center justify-between">
+							<input type="file" accept=".png,.jpeg,.jpg" onChange={(e: any) => {if(e.target.files.length !== 0) setPoster(e?.target?.files[0])}} />
+							{poster ? (<><img src={URL.createObjectURL(poster)} className="w-[80px] h-[80px]" alt="" />
+								<div className="shareX ml-[10px] cursor-pointer" onClick={() => setPoster(null)}>X</div></>
+							) : (<img src={`http://localhost:8228/files/${itemTours?.poster}`} className="w-[80px] h-[80px]" alt="" />)}
+						</div>
+					</div>
+				</div>
 					<div className="my-2">
 						<div className="flex items-center">
 							<span className="w-[140px] font-medium text-base">
@@ -171,6 +235,8 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 							</p>
 						)}
 					</div>
+					</div>
+					<div className="">
 					<div className="my-2">
 						<div className="flex items-center">
 							<span className="w-[140px] font-medium text-base">
@@ -199,7 +265,7 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 							<div className="flex-1">
 								<input
 									placeholder="Nhập ngày bắt đầu"
-									type="text"
+									type="date"
 									{...register("startDate")}
 									className="form-control w-full"
 								/>
@@ -220,7 +286,7 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 							<div className="flex-1">
 								<input
 									placeholder="Nhập ngày kết thúcr"
-									type="text"
+									type="date"
 									{...register("endDate")}
 									className="form-control w-full"
 								/>
@@ -253,6 +319,68 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 							</p>
 						)}
 					</div>
+					<div className="my-2">
+					<div className="flex items-center">
+						<span className="w-[140px] font-medium text-base">
+						Phương tiện:
+						</span>
+						<div className="flex-1">
+							<input
+								placeholder="Nhập phương tiện di chuyển"
+								type="text"
+								{...register("transport")}
+								className="form-control w-full"
+							/>
+						</div>
+					</div>
+					{errors?.transport && (
+						<p className="text-sm text-red-700 mt-1 ml-1 m-auto pl-[140px]">
+							{errors?.transport?.message}
+						</p>
+					)}
+				</div>
+				<div className="my-2">
+					<div className="flex items-center">
+						<span className="w-[140px] font-medium text-base">
+						  Xuất phát:
+						</span>
+						<div className="flex-1">
+							<input
+								placeholder="Nhập địa điểm xuất phát"
+								type="text"
+								{...register("startLocation")}
+								className="form-control w-full"
+							/>
+						</div>
+					</div>
+					{errors?.startLocation && (
+						<p className="text-sm text-red-700 mt-1 ml-1 m-auto pl-[140px]">
+							{errors?.startLocation?.message}
+						</p>
+					)}
+				</div>
+				<div className="my-2">
+					<div className="flex items-center">
+						<span className="w-[140px] font-medium text-base">
+						  Các địa điểm:
+						</span>
+						<div className="flex-1">
+							<input
+								placeholder="Nhập các địa điểm"
+								type="text"
+								{...register("listLocation")}
+								className="form-control w-full"
+							/>
+						</div>
+					</div>
+					{errors?.listLocation && (
+						<p className="text-sm text-red-700 mt-1 ml-1 m-auto pl-[140px]">
+							{errors?.listLocation?.message}
+						</p>
+					)}
+							</div>
+				</div>
+				</div>
 				</div>
 			</Modal>
 		</>

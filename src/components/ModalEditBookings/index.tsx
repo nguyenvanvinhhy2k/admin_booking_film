@@ -32,7 +32,7 @@ const actionsStatus = [
 	},
 	{
 		value: "DAXACNHAN",
-		label: "Đặt thành công"
+		label: "Xác nhận"
 	},
 	{
 		value: "HUYTOUR",
@@ -75,7 +75,7 @@ const ModalEditBookings = ({ showModalEdit, setShowModalEdit, itemBookings, call
 			const res = await bookingAPI.updateBookings(itemBookings?.id, {
 				userId: itemBookings?.userId,
 				tourId: itemBookings?.tourId,
-				bookingDate: itemBookings?.email,
+				bookingDate: itemBookings?.bookingDate,
 				status: data?.status,
 			})
 			setShowModalEdit(false)
@@ -196,7 +196,7 @@ const ModalEditBookings = ({ showModalEdit, setShowModalEdit, itemBookings, call
 							<span className="w-[140px] font-medium text-base">Trạng thái:</span>
 							<div className="flex-1">
 							<select {...register("status")} id="crud-form-1" className="form-control w-full" >
-									<option value={itemBookings?.status} className="hidden" selected >{itemBookings?.status === "DADAT" ? "Chờ xác nhận" : itemBookings.status === "DAXACNHAN" ? "Đã xác nhận" : itemBookings.status === "HUYTOUR" ? "Đã hủy" : itemBookings?.status === "DAHOANTHANHTOUR" && "Đã hoàn thành tour" }</option>
+									<option value={itemBookings?.status} className="hidden" selected >{itemBookings?.status === "DADAT" ? "Chờ xử lí" : itemBookings.status === "DAXACNHAN" ? "Đã xác nhận" : itemBookings.status === "HUYTOUR" ? "Đã hủy" : itemBookings?.status === "DAHOANTHANHTOUR" && "Đã hoàn thành tour" }</option>
 									{
 										actionsStatus?.map((cate: any) => (
 												<option key={cate?.value} value={cate?.value}>{cate?.label}</option>

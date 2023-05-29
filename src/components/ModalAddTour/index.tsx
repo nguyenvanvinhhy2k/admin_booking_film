@@ -23,7 +23,8 @@ const schema = yup.object().shape({
 	price: yup.number().typeError("Trường này bắt buộc nhập số").required("Trường này bắt buộc nhập"),
 	transport: yup.string().required("Vui lòng nhập transport"),
 	startLocation: yup.string().required("Vui lòng nhập transport"),
-	listLocation: yup.string().required("Vui lòng nhập transport")
+	listLocation: yup.string().required("Vui lòng nhập listLocation"),
+	listDate: yup.string().required("Vui lòng nhập listDate")
 })
 
 type IProps = {
@@ -56,6 +57,7 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 			transport: '',
 			startLocation: '',
 			listLocation: '',
+			listDate: ''
 		}
 	})
 
@@ -76,6 +78,7 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 			formData.append("transport", data.transport)
       formData.append("startLocation", data.startLocation)
       formData.append("listLocation", data.listLocation)
+			formData.append("listDate",  data.listDate)
 			formData.append("code", `T${Math.floor(1000 + Math.random() * 9000)}`)
 		try {
 			const res = await axios({
@@ -127,6 +130,7 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 			transport: '',
 			startLocation: '',
 			listLocation: '',
+			listDate: ''
 		})
 	}, [ setShowModalAdd, showModalAdd])
 	return (
@@ -372,6 +376,27 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 					{errors?.listLocation && (
 						<p className="text-sm text-red-700 mt-1 ml-1 m-auto pl-[140px]">
 							{errors?.listLocation?.message}
+						</p>
+					)}
+				</div>
+
+				<div className="my-2">
+					<div className="flex items-center">
+						<span className="w-[140px] font-medium text-base">
+						  Các ngày đặt:
+						</span>
+						<div className="flex-1">
+							<input
+								placeholder="Nhập các ngày đặt"
+								type="text"
+								{...register("listDate")}
+								className="form-control w-full"
+							/>
+						</div>
+					</div>
+					{errors?.listDate && (
+						<p className="text-sm text-red-700 mt-1 ml-1 m-auto pl-[140px]">
+							{errors?.listDate?.message}
 						</p>
 					)}
 				</div>

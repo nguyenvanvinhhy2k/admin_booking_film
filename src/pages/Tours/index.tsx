@@ -186,6 +186,7 @@ const Tours = () => {
 															<th className="whitespace-nowrap">Phương tiện</th>
 															<th className="whitespace-nowrap">Xuất phát</th>
                               <th className="whitespace-nowrap">Địa điểm</th>
+															<th className="whitespace-nowrap">Các ngày đặt</th>
 															<th className="whitespace-nowrap">Chức năng</th>
                             </tr>
                           </thead>
@@ -208,6 +209,7 @@ const Tours = () => {
 																			<td>{item.transport}</td>
                                       <td>{item.startLocation}</td>
                                       <td>{item?.listLocation}</td>
+																			<td>{item?.listDate}</td>
                                       <td className="table-report__action w-[1%] border-l whitespace-nowrap lg:whitespace-normal">
                                         <div className="flex items-center justify-between">
                                           <div className={ `font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => {if(user?.role === "ADMIN") handleUpdate(item)} }>

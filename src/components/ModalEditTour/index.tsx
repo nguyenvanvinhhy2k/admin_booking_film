@@ -21,12 +21,16 @@ type IProps = {
 
 const schema = yup.object().shape({
 	tourName: yup.string().required("Vui lòng nhập tourName"),
-	category: yup.string().required("Vui lòng nhập loại tour"),
 	description: yup.string().required("Vui lòng nhập description"),
 	capacity: yup.number().typeError("Trường này bắt buộc nhập số").required("Trường này bắt buộc nhập"),
 	startDate: yup.string().required("Vui lòng nhập startDate"),
 	endDate: yup.string().required("Vui lòng nhập endDate"),
+	category: yup.string().required("Vui lòng nhập cateId"),
 	price: yup.number().typeError("Trường này bắt buộc nhập số").required("Trường này bắt buộc nhập"),
+	transport: yup.string().required("Vui lòng nhập transport"),
+	startLocation: yup.string().required("Vui lòng nhập transport"),
+	listLocation: yup.string().required("Vui lòng nhập listLocation"),
+	listDate: yup.string().required("Vui lòng nhập listDate")
 })
 
 const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }: IProps) => {
@@ -36,7 +40,6 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 	const [params, setQueryParams] = useQueryParams()
 	const { page } = params
 
-	console.log(itemTours)
 
 	const {
 		register,
@@ -51,11 +54,12 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 			description: itemTours.description,
 			capacity: itemTours.capacity,
 			startDate: itemTours.startDate,
-			endDate: itemTours.endDaterName,
+			endDate: itemTours.endDate,
 			price: itemTours.price,
 			transport: itemTours.transport,
 			startLocation: itemTours.startLocation,
 			listLocation: itemTours.listLocation,
+			listDate: itemTours.listDate
 		}
 	})
 
@@ -76,6 +80,7 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 		formData.append("transport", data.transport)
 		formData.append("startLocation", data.startLocation)
 		formData.append("listLocation", data.listLocation)
+		formData.append("listDate", data.listDate)
 		formData.append("code", itemTours.code)
 		try {
 			const res = await axios({
@@ -127,6 +132,7 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 			transport: itemTours.transport,
 			startLocation: itemTours.startLocation,
 			listLocation: itemTours.listLocation,
+			listDate: itemTours.listDate
 		})
 	}, [itemTours, setShowModalEdit, showModalEdit])
 	return (
@@ -376,6 +382,27 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 					{errors?.listLocation && (
 						<p className="text-sm text-red-700 mt-1 ml-1 m-auto pl-[140px]">
 							{errors?.listLocation?.message}
+						</p>
+					)}
+							</div>
+
+				<div className="my-2">
+					<div className="flex items-center">
+						<span className="w-[140px] font-medium text-base">
+						  Các ngày đặt:
+						</span>
+						<div className="flex-1">
+							<input
+								placeholder="Nhập các ngày đặt"
+								type="text"
+								{...register("listDate")}
+								className="form-control w-full"
+							/>
+						</div>
+					</div>
+					{errors?.listDate && (
+						<p className="text-sm text-red-700 mt-1 ml-1 m-auto pl-[140px]">
+							{errors?.listDate?.message}
 						</p>
 					)}
 							</div>

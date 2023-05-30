@@ -168,52 +168,52 @@ const Tours = () => {
 										</div>
 									</div>
                   <div className="p-5" id="basic-table">
-                    <div className="preview">
-                      <div className="mt-8 overflow-auto">
-                        <table className="table">
-                          <thead className="table-dark">
-                            <tr className="text-center">
-                              <th className="whitespace-nowrap">ID</th>
-                              <th className="whitespace-nowrap">Tên tour</th>
-                              <th className="whitespace-nowrap">Loại tour</th>
-															<th className="whitespace-nowrap">Ảnh poster</th>
-                              <th className="whitespace-nowrap">Ảnh banner</th>
-                              <th className="whitespace-nowrap">Mô tả</th>
-                              <th className="whitespace-nowrap">Thời gian bắt đầu</th>
-                              <th className="whitespace-nowrap">Thời gian kết thúc</th>
-                              <th className="whitespace-nowrap">Giá tiền</th>
-															<th className="whitespace-nowrap">Số lượng</th>
-															<th className="whitespace-nowrap">Phương tiện</th>
-															<th className="whitespace-nowrap">Xuất phát</th>
-                              <th className="whitespace-nowrap">Địa điểm</th>
-															<th className="whitespace-nowrap">Các ngày đặt</th>
-															<th className="whitespace-nowrap">Chức năng</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {
-                              tours?.map((item: any) => {
-                                return (
-                                  <>
-                                    <tr className="text-center">
-                                      <td>{item.id}</td>
-                                      <td>{item.tourName}</td>
-                                      <td>{item?.cateName}</td>
-																			<td><img src={`http://localhost:8228/files/${item.poster}`} alt="" /></td>
-                                      <td><img src={`http://localhost:8228/files/${item?.banner}`} alt="" /></td>
-                                      <td>{item.description}</td>
-                                      <td>{item?.startDate && formatDate(item?.startDate, "DD/MM/YYYY")}</td>
-                                      <td>{item?.endDate && formatDate(item?.endDate, "DD/MM/YYYY")}</td>
-                                      <td>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item?.price)}</td>
-																			<td>{item.capacity}</td>
-																			<td>{item.transport}</td>
-                                      <td>{item.startLocation}</td>
-                                      <td>{item?.listLocation}</td>
-																			<td>{item?.listDate}</td>
-                                      <td className="table-report__action w-[1%] border-l whitespace-nowrap lg:whitespace-normal">
-                                        <div className="flex items-center justify-between">
-                                          <div className={ `font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => {if(user?.role === "ADMIN") handleUpdate(item)} }>
-                                            <div className='inline-block' />
+									  <div className="preview">
+										  <div className="mt-8 overflow-auto">
+											  <table className="table">
+												  <thead className="table-dark">
+													  <tr className="text-center">
+														  <th className="whitespace-nowrap w-[1%]">ID</th>
+														  <th className="whitespace-nowrap w-[10%]">Tên tour</th>
+														  <th className="whitespace-nowrap w-[10%]">Loại tour</th>
+														  <th className="whitespace-nowrap w-[10%]">Ảnh poster</th>
+														  <th className="whitespace-nowrap w-[10%]">Ảnh banner</th>
+														  <th className="whitespace-nowrap w-[20%]">Mô tả</th>
+														  <th className="whitespace-nowrap w-[10%]">Thời gian bắt đầu</th>
+														  <th className="whitespace-nowrap w-[10%]">Thời gian kết thúc</th>
+														  <th className="whitespace-nowrap w-[10%]">Giá tiền</th>
+														  <th className="whitespace-nowrap w-[1%]">Số lượng</th>
+														  <th className="whitespace-nowrap w-[10%]">Phương tiện</th>
+														  <th className="whitespace-nowrap w-[10%]">Xuất phát</th>
+														  <th className="whitespace-nowrap w-[10%]">Địa điểm</th>
+														  <th className="whitespace-nowrap w-[10%]">Các ngày đặt</th>
+														  <th className="whitespace-nowrap w-[10%]">Chức năng</th>
+													  </tr>
+												  </thead>
+												  <tbody>
+													  {
+														  tours?.map((item: any) => {
+															  return (
+																  <>
+																	  <tr className="text-center">
+																		  <td className='w-[1%]'>{item.id}</td>
+																		  <td className='w-[10%]'>{item.tourName}</td>
+																		  <td className='w-[10%]'>{item?.cateName}</td>
+																		  <td className='w-[10%]'><img src={`http://localhost:8228/files/${item.poster}`} alt="" /></td>
+																		  <td className='w-[10%]'><img src={`http://localhost:8228/files/${item?.banner}`} alt="" /></td>
+																		  <td className=' w-[20%]'><p className='truncate w-[300px]' title={item.description}> {item.description}</p></td>
+																		  <td className='w-[10%]'>{item?.startDate && formatDate(item?.startDate, "DD/MM/YYYY")}</td>
+																		  <td className='w-[10%]'>{item?.endDate && formatDate(item?.endDate, "DD/MM/YYYY")}</td>
+																		  <td className='w-[10%]'>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item?.price)}</td>
+																		  <td className='w-[1%]'>{item.capacity}</td>
+																		  <td className='w-[10%]'>{item.transport}</td>
+																		  <td className='w-[10%]'>{item.startLocation}</td>
+																		  <td className='w-[10%]'>{item?.listLocation}</td>
+																		  <td className='w-[10%]'>{item?.listDate}</td>
+																		  <td className="table-report__action w-[1%] border-l whitespace-nowrap lg:whitespace-normal">
+																			  <div className="flex items-center justify-between">
+																				  <div className={`font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => { if (user?.role === "ADMIN") handleUpdate(item) }}>
+																					  <div className='inline-block' />
                                             <Edit className='mr-1.5 inline-block' size={16} />
                                             <div>
                                             </div>

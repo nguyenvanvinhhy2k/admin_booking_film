@@ -205,10 +205,10 @@ const ModalEditTour = ({ showModalEdit, setShowModalEdit, itemTours, callBack }:
 							  Mô tả:
 							</span>
 							<div className="flex-1">
-								<input
+								<textarea
 									placeholder="Nhập mô tả"
-									type="text"
 									{...register("description")}
+									rows={6}
 									className="form-control w-full"
 								/>
 							</div>

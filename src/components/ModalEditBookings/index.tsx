@@ -65,7 +65,7 @@ const ModalEditBookings = ({ showModalEdit, setShowModalEdit, itemBookings, call
 			tourName: itemBookings?.tours?.tourName,
 			username: itemBookings?.user?.name,
 			dateTime: formatDate(itemBookings?.createdAt, "DD/MM/YYYY HH:mm:ss"),
-			bookingDate: formatDate(itemBookings?.bookingDate, "DD/MM/YYYY"),
+			bookingDate: `${itemBookings?.bookingDate}/2023`,
 			status: itemBookings?.status,
 		}
 	})
@@ -99,7 +99,7 @@ const ModalEditBookings = ({ showModalEdit, setShowModalEdit, itemBookings, call
 			tourName: itemBookings?.tours?.tourName,
 			username: itemBookings?.user?.name,
 			dateTime: formatDate(itemBookings?.createdAt, "DD/MM/YYYY HH:mm:ss"),
-			bookingDate: formatDate(itemBookings?.bookingDate, "DD/MM/YYYY"),
+			bookingDate: `${itemBookings?.bookingDate}/2023`,
 			status: itemBookings?.status,
 		})
 	}, [itemBookings, setShowModalEdit, showModalEdit])

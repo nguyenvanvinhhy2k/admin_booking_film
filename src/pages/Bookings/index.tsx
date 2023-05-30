@@ -221,7 +221,7 @@ const Bookings = () => {
 											<td>{item.tours.tourName}</td>
 											<td>{item.user.name}</td>
 											<td>{item?.createdAt && formatDate(item?.createdAt, "DD/MM/YYYY HH:mm:ss")}</td>
-											<td>{item?.bookingDate && formatDate(item?.bookingDate, "DD/MM/YYYY")}</td>
+											<td>{item?.bookingDate}/2023</td>
 											<td className={`${item?.status === "DADAT" ? "text-[#FFCC00]" : item.status === "DAXACNHAN" ? "text-[#0066FF]" : item.status === "DANGDITOUR" ? "text-[#FF1493]" : item.status === "HUYTOUR" ? "text-[#CC0000]" : item?.status === "DAHOANTHANHTOUR" && "text-[#00CC00]"}`}>{item?.status === "DADAT" ? "Chờ xử lí" : item.status === "DAXACNHAN" ? "Đã xác nhận" : item.status === "DANGDITOUR" ? "Đang đi tour" : item.status === "HUYTOUR" ? "Đã hủy" : item?.status === "DAHOANTHANHTOUR" && "Đã hoàn thành"}</td>
 											<td className="table-report__action w-[1%] border-l whitespace-nowrap lg:whitespace-normal">
 												<div className="flex items-center justify-between">

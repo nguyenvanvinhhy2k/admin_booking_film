@@ -219,9 +219,9 @@ const ModalAddTour = ({ setShowModalAdd, showModalAdd, callBack }: IProps) => {
 						Description:
 						</span>
 						<div className="flex-1">
-							<input
+							<textarea 
 								placeholder="Nhập description"
-								type="text"
+								rows={6}
 								{...register("description")}
 								className="form-control w-full"
 							/>

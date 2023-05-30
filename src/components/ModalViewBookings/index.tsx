@@ -44,7 +44,7 @@ const ModalViewBookings = ({ showModalView, setShowModalView, itemBookings, call
 						<p className="mb-[10px]">Tổng tiền : {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(itemBookings?.totalPrice)}</p>
 						<p className="mb-[10px]">Ngày đặt : {itemBookings?.createdAt && formatDate(itemBookings?.createdAt, "DD/MM/YYYY HH:mm:ss")}</p>
 						<p className="mb-[10px]">Ngày khởi hành : {itemBookings?.createdAt && formatDate(itemBookings?.createdAt, "DD/MM/YYYY")}</p>
-						<p className="mb-[10px]">Trạng thái : <span className={`${itemBookings?.status === "DADAT" ? "text-[#FFCC00]" : itemBookings.status === "DAXACNHAN" ? "text-[#0066FF]" : itemBookings.status === "HUYTOUR" ? "text-[#CC0000]" : itemBookings?.status === "DAHOANTHANHTOUR" && "text-[#00CC00]" } uppercase`}> {itemBookings?.status === "DADAT" ? "Chờ xác nhận" : itemBookings.status === "DAXACNHAN" ? "Đã xác nhận" : itemBookings.status === "HUYTOUR" ? "Đã hủy" : itemBookings?.status === "DAHOANTHANHTOUR" && "Đã hoàn thành tour" }</span></p>
+						<p className="mb-[10px]">Trạng thái : <span className={`${itemBookings?.status === "DADAT" ? "text-[#FFCC00]" : itemBookings.status === "DAXACNHAN" ? "text-[#0066FF]" : itemBookings.status === "DANGDITOUR" ? "text-[#FF1493]" : itemBookings.status === "HUYTOUR" ? "text-[#CC0000]" : itemBookings?.status === "DAHOANTHANHTOUR" && "text-[#00CC00]"}`}>{itemBookings?.status === "DADAT" ? "Chờ xử lí" : itemBookings.status === "DAXACNHAN" ? "Đã xác nhận" : itemBookings.status === "DANGDITOUR" ? "Đang đi tour" : itemBookings.status === "HUYTOUR" ? "Đã hủy" : itemBookings?.status === "DAHOANTHANHTOUR" && "Đã hoàn thành"}</span></p>
 
 					</div>
 

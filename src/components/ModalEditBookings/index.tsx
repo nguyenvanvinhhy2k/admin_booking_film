@@ -35,6 +35,10 @@ const actionsStatus = [
 		label: "Xác nhận"
 	},
 	{
+		value: "DANGDITOUR",
+		label: "Đang đi tour"
+	},
+	{
 		value: "HUYTOUR",
 		label: "Đã hủy"
 	},
@@ -196,7 +200,7 @@ const ModalEditBookings = ({ showModalEdit, setShowModalEdit, itemBookings, call
 							<span className="w-[140px] font-medium text-base">Trạng thái:</span>
 							<div className="flex-1">
 							<select {...register("status")} id="crud-form-1" className="form-control w-full" >
-									<option value={itemBookings?.status} className="hidden" selected >{itemBookings?.status === "DADAT" ? "Chờ xử lí" : itemBookings.status === "DAXACNHAN" ? "Đã xác nhận" : itemBookings.status === "HUYTOUR" ? "Đã hủy" : itemBookings?.status === "DAHOANTHANHTOUR" && "Đã hoàn thành tour" }</option>
+									<option value={itemBookings?.status} className="hidden" selected >{itemBookings?.status === "DADAT" ? "Chờ xử lí" : itemBookings.status === "DAXACNHAN" ? "Đã xác nhận" : itemBookings.status === "DANGDITOUR" ? "Đang đi tour" : itemBookings.status === "HUYTOUR" ? "Đã hủy" : itemBookings?.status === "DAHOANTHANHTOUR" && "Đã hoàn thành tour" }</option>
 									{
 										actionsStatus?.map((cate: any) => (
 												<option key={cate?.value} value={cate?.value}>{cate?.label}</option>

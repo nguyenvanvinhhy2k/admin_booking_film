@@ -23,6 +23,10 @@ const actionsStatus = [
 		label: "Đặt thành công"
 	},
 	{
+		value: "DANGDITOUR",
+		label: "Đang đi tour"
+	},
+	{
 		value: "HUYTOUR",
 		label: "Đã hủy"
 	},
@@ -213,24 +217,24 @@ const Bookings = () => {
                                 return (
                                   <>
                                     <tr className="text-center">
-                                      <td>{item.id}</td>
-																			<td>{item.tours.tourName}</td>
-                                      <td>{item.user.name}</td>
-                                      <td>{item?.createdAt && formatDate(item?.createdAt, "DD/MM/YYYY HH:mm:ss")}</td>
-                                      <td>{item?.bookingDate && formatDate(item?.bookingDate, "DD/MM/YYYY")}</td>
-																			<td className={`${item?.status === "DADAT" ? "text-[#FFCC00]" : item.status === "DAXACNHAN" ? "text-[#0066FF]" : item.status === "HUYTOUR" ? "text-[#CC0000]" : item?.status === "DAHOANTHANHTOUR" && "text-[#00CC00]" }`}>{item?.status === "DADAT" ? "Chờ xử lí" : item.status === "DAXACNHAN" ? "Đã xác nhận" : item.status === "HUYTOUR" ? "Đã hủy" : item?.status === "DAHOANTHANHTOUR" && "Đã hoàn thành" }</td>
-                                      <td className="table-report__action w-[1%] border-l whitespace-nowrap lg:whitespace-normal">
-                                        <div className="flex items-center justify-between">
-																				<div className={ `font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => { if(user?.role === "ADMIN") handleView(item)}}>
-                                            <div className='inline-block' />
-                                            <Eye className='mr-1.5 inline-block' size={16} />
-                                            <div>
-                                            </div>
-                                          </div>
-                                          <div className={ `font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => { if(user?.role === "ADMIN") handleUpdate(item)}}>
-                                            <div className='inline-block' />
-                                            <Edit className='mr-1.5 inline-block' size={16} />
-                                            <div>
+											<td>{item.id}</td>
+											<td>{item.tours.tourName}</td>
+											<td>{item.user.name}</td>
+											<td>{item?.createdAt && formatDate(item?.createdAt, "DD/MM/YYYY HH:mm:ss")}</td>
+											<td>{item?.bookingDate && formatDate(item?.bookingDate, "DD/MM/YYYY")}</td>
+											<td className={`${item?.status === "DADAT" ? "text-[#FFCC00]" : item.status === "DAXACNHAN" ? "text-[#0066FF]" : item.status === "DANGDITOUR" ? "text-[#FF1493]" : item.status === "HUYTOUR" ? "text-[#CC0000]" : item?.status === "DAHOANTHANHTOUR" && "text-[#00CC00]"}`}>{item?.status === "DADAT" ? "Chờ xử lí" : item.status === "DAXACNHAN" ? "Đã xác nhận" : item.status === "DANGDITOUR" ? "Đang đi tour" : item.status === "HUYTOUR" ? "Đã hủy" : item?.status === "DAHOANTHANHTOUR" && "Đã hoàn thành"}</td>
+											<td className="table-report__action w-[1%] border-l whitespace-nowrap lg:whitespace-normal">
+												<div className="flex items-center justify-between">
+													<div className={`font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => { if (user?.role === "ADMIN") handleView(item) }}>
+														<div className='inline-block' />
+														<Eye className='mr-1.5 inline-block' size={16} />
+														<div>
+														</div>
+													</div>
+													<div className={`font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => { if (user?.role === "ADMIN") handleUpdate(item) }}>
+														<div className='inline-block' />
+														<Edit className='mr-1.5 inline-block' size={16} />
+														<div>
                                             </div>
                                           </div>
                                           <div className={ `font-semibold text-sky-600 hover:opacity-60 flex items-center ${user?.role === "ADMIN" ? "cursor-pointer " : "cursor-not-allowed"}`} onClick={() => { if(user?.role === "ADMIN") handleStatus(item.id)}}>

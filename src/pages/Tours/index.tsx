@@ -197,7 +197,7 @@ const Tours = () => {
 																  <>
 																	  <tr className="text-center">
 																		  <td className='w-[1%]'>{item.id}</td>
-																		  <td className='w-[10%]'>{item.tourName}</td>
+																		  <td className='w-[10%]'><p className='w-[200px]'>{item.tourName}</p></td>
 																		  <td className='w-[10%]'>{item?.cateName}</td>
 																		  <td className='w-[10%]'><img src={`http://localhost:8228/files/${item.poster}`} alt="" /></td>
 																		  <td className='w-[10%]'><img src={`http://localhost:8228/files/${item?.banner}`} alt="" /></td>
